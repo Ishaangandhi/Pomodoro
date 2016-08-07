@@ -20,9 +20,13 @@
 	<meta name="theme-color" content="#ffffff">
 
 	<link rel="stylesheet" type="text/css" href="pomodoro.css">
+
 	<script type="text/javascript">
 		
 		var cycles = 2;
+		console.log(cycles);
+		
+
 		var working = true;
 		var paused = false;
 		var intervalID;
@@ -47,6 +51,7 @@
 				if(timer < 0){
 					clearInterval(intervalID);
 					working = !working;
+					document.getElementById("timerStatus").textContent = (working) ? "Work":"Break";
 					console.log(working);
 					if(working == true){
 						console.log("WORK" + working)
@@ -58,6 +63,8 @@
 						console.log("BREAK" + working)
 						breakTimer();
 						cycles--;
+						document.getElementById("tomatoTracker").textContent = cycles + " tomatoes remaining";
+
 					}
 				}
 			}, 1000);
@@ -74,6 +81,7 @@
 		window.onload = workTimer;
 
 		function workTimer() {
+			document.getElementById("tomatoTracker").textContent = cycles + " tomatoes remaining";
 			var timerAmount = 60 * .1;
 			masterInterval = timerAmount;
 			bar.style.backgroundColor = "red";
@@ -110,12 +118,15 @@
 </head>
 
 <body>
+	<div class = "header"><button id = "headerElementLeft" onclick = "timerLink()">Timer</button><button id = "headerElementRight" onclick = "metricsLink">Metrics</button></div>
 	<div class = "wrapper">
 		<div id = "progress">
 			<div id = "bar">
 			</div>
 		</div>
-		<div id = "timerWindow"><div class = "timer" id = "timer"></div></div>
+		<div id = "timerWindow"><div class = "timer" id = "timer"></div><div id = "timerStatus">Work</div></div>
+
+		<div id = "tomatoTracker">X Toatoes Remaining</div>
 		<div id = "button">
 			<button onclick = "pauseTimer()" class = "button" id = "pauseButton">Pause</button>
 		</div>
