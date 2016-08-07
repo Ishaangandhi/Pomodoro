@@ -24,6 +24,9 @@
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.21/themes/base/jquery-ui.css" type="text/css" media="all" />
 
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script type="text/javascript" src="wz_jsgraphics.js">
+		
+	</script>
 	<script type="text/javascript">
 		
 		var cycles = 3;
@@ -40,6 +43,14 @@
 		var timer, minutes, secs;
 		var d = new Date();
 
+
+		function drawVine() {
+			var c=document.getElementById("canvas");
+			var ctx=c.getContext("2d");
+			ctx.drawImage(document.getElementById("source"), 0, 0, 483.2, 256);
+
+		}
+
 		function dummyData(date){
 			setCookie(date, getCookie(date) + "🍅", 365);
 		}
@@ -47,7 +58,7 @@
 			console.log("Stared Timer" + " " + time + ", " + display);
 			timer = time;
 			intervalID = setInterval(function () {
-				
+
 				minutes = parseInt(timer / 60, 10);
 				secs = parseInt(timer % 60, 10);
 				if(secs < 10){
@@ -58,12 +69,12 @@
 				updateBar(timer, masterInterval);
 				timer--;
 
-				
+
 				if(timer < 0){
 					clearInterval(intervalID);
 					working = !working;
 					document.getElementById("timerStatus").textContent = (working) ? "Work":"Break";
-					
+
 					if(working == true){
 						console.log("WORK" + working)
 						if(cycles > 0){
@@ -72,7 +83,7 @@
 							document.getElementById("pauseButton").textContent = "Continue Working"
 							paused = true;
 							buttonState = true;
-							
+
 						}
 						endBreak.play();
 					}
@@ -86,7 +97,7 @@
 							setCookie(d.getFullYear() + "-" + month+ "-" + d.getDate(), getCookie(d.getFullYear() + "-" + month + "-" + d.getDate()) + "🍅", 365);
 						}
 
-						
+
 						console.log(document.cookie);
 						console.log(getCookie("title"));
 						breakTimer();
@@ -182,7 +193,30 @@
 		var width = (part/whole)*100;
 
 		bar.style.width= width + '%';
+		
+		if(width>90){
+			console.log("Small");
+			document.getElementById("source").src = "tomatoBackground0.png"
+		}
+		else if(width <= 90 && width >70){
+			console.log("bigger");
+			document.getElementById("source").src = "tomatoBackground10.png"
+		}
 
+		else if(width <= 70 && width >=40){
+			console.log("biggerest");
+			document.getElementById("source").src = "tomatoBackground30.png"
+		}
+
+		else if(width <= 50 && width >=30){
+			document.getElementById("source").src = "tomatoBackground50.png"
+		}
+		else if(width <= 30 && width >=10){
+			document.getElementById("source").src = "tomatoBackground70.png"
+		}
+		else if(width < 10){
+			document.getElementById("source").src = "tomatoBackground100.png"
+		}
 	}
 
 	function metricsLink(){
@@ -195,6 +229,10 @@
 </head>
 
 <body>
+
+
+
+
 	<div id = "everything">
 		<div id = "dialog" title = "Welcome" style = "display:none">
 			How many tomatoes would you like to work for?
@@ -212,6 +250,12 @@
 				<button onclick = "pauseTimer()" class = "button" id = "pauseButton">Pause</button>
 			</div>
 		</div>
+	</div>
+	<br>
+	<<div id = "image-container" style="display:none">
+		
+		<img id="source" src="v"
+		>
 	</div>
 	
 	

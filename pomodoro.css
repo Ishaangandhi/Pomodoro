@@ -25,6 +25,29 @@ div{font-family: "Helvetica Neue", "Helvetica"; color:black;  border-color: blac
 		background-color: green;
 		font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
 
+
+	}
+
+	#image-container{
+		z-index: -1;
+	}
+
+	#image-cover{
+		background-color: #DCC3A5;
+		height: 100%;
+
+	}
+
+	#source {
+    
+    width:100%;
+    clear:both;
+    margin:auto;
+    display:block;
+    position:absolute;
+    align-content: center;
+    bottom:0;
+    height: 30%;
 	}
 	#tomatoTracker{
 		margin: auto;
