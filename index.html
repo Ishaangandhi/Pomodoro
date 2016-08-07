@@ -2,32 +2,36 @@
 <head>
 	<title>Pomodoro Scheduler</title>
 	<link rel="apple-touch-icon" sizes="57x57" href="favicon/apple-icon-57x57.png">
-<link rel="apple-touch-icon" sizes="60x60" href="favicon/apple-icon-60x60.png">
-<link rel="apple-touch-icon" sizes="72x72" href="favicon/apple-icon-72x72.png">
-<link rel="apple-touch-icon" sizes="76x76" href="favicon/apple-icon-76x76.png">
-<link rel="apple-touch-icon" sizes="114x114" href="favicon/apple-icon-114x114.png">
-<link rel="apple-touch-icon" sizes="120x120" href="favicon/apple-icon-120x120.png">
-<link rel="apple-touch-icon" sizes="144x144" href="favicon/apple-icon-144x144.png">
-<link rel="apple-touch-icon" sizes="152x152" href="favicon/apple-icon-152x152.png">
-<link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-icon-180x180.png">
-<link rel="icon" type="image/png" sizes="192x192"  href="favicon/android-icon-192x192.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
-<link rel="manifest" href="favicon/manifest.json">
-<meta name="msapplication-TileColor" content="#ffffff">
-<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
-<meta name="theme-color" content="#ffffff">
+	<link rel="apple-touch-icon" sizes="60x60" href="favicon/apple-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="favicon/apple-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="favicon/apple-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="favicon/apple-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="favicon/apple-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="favicon/apple-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="favicon/apple-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-icon-180x180.png">
+	<link rel="icon" type="image/png" sizes="192x192"  href="favicon/android-icon-192x192.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+	<link rel="manifest" href="favicon/manifest.json">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+	<meta name="theme-color" content="#ffffff">
 
 	<link rel="stylesheet" type="text/css" href="pomodoro.css">
 	<script type="text/javascript">
 		
 		var cycles = 2;
 		var working = true;
+		var paused = false;
+		var intervalID;
+		var masterInterval;
+		var timer, minutes, secs;
 		function startTimer(time, display) {
 			console.log("Stared Timer" + " " + time + ", " + display);
-			var timer = time, minutes, secs;
-			var intervalID = setInterval(function () {
+			timer = time;
+			intervalID = setInterval(function () {
 				
 				minutes = parseInt(timer / 60, 10);
 				secs = parseInt(timer % 60, 10);
@@ -36,9 +40,9 @@
 					secs = "0" + secs;
 				}
 				display.textContent = minutes + ":" + secs;
-				updateBar(timer, time);
+				updateBar(timer, masterInterval);
 				timer--;
-			
+
 				
 				if(timer < 0){
 					clearInterval(intervalID);
@@ -47,7 +51,7 @@
 					if(working == true){
 						console.log("WORK" + working)
 						if(cycles > 0){
-						workTimer();
+							workTimer();
 						}
 					}
 					else{
@@ -62,6 +66,7 @@
 		function breakTimer() {
 			console.log("break time")
 			var timerAmount = 60 * .05; 
+			masterInterval = timerAmount;
 			bar.style.backgroundColor = "green";
 			timerText = document.querySelector('#timer');
 			startTimer(timerAmount, timerText)
@@ -70,11 +75,27 @@
 
 		function workTimer() {
 			var timerAmount = 60 * .1;
+			masterInterval = timerAmount;
 			bar.style.backgroundColor = "red";
 			timerText = document.querySelector('#timer');
 			startTimer(timerAmount, timerText);
 		};
 
+		function pauseTimer(){
+			if(cycles > 0){
+				if(!paused){
+					clearInterval(intervalID);
+					document.getElementById("pauseButton").textContent = "Continue"
+					paused = true;
+
+				}
+				else{
+					paused = false;
+					document.getElementById("pauseButton").textContent = "Pause"
+					startTimer(timer,document.querySelector('#timer'))
+				}
+			}
+		}
 
 		function updateBar(part, whole){
 			var bar = document.getElementById("bar");
@@ -83,21 +104,21 @@
 			bar.style.width= width + '%';
 
 		}
-	
+
 
 	</script>
 </head>
 
 <body>
-	<div class = "body">
+	<div class = "wrapper">
 		<div id = "progress">
 			<div id = "bar">
-
 			</div>
 		</div>
 		<div id = "timerWindow"><div class = "timer" id = "timer"></div></div>
-
-		<div id = "pause"></div>
+		<div id = "button">
+			<button onclick = "pauseTimer()" class = "button" id = "pauseButton">Pause</button>
+		</div>
 	</div>
 </body>
 

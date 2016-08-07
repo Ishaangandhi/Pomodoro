@@ -1,5 +1,6 @@
 .timer{text-align:center; font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif; font-weight:bold; font-size:5em}
-#timerWindow{float:right;  padding-right: 10%; padding-top:5%;}
+div{font-family: "Helvetica Neue", "Helvetica"}
+#timerWindow{float:right;   width:35%; padding-top:5%;}
 .body{position: relative}
 #progress{ position: relative;
     width: 60%;
@@ -18,6 +19,30 @@
 }
 #pause{
 	position: relative;
-	width:20%;
-	background-color: red;
+	margin:auto;
+	background-color: green;
+}
+
+ #wrapper {
+        float: left;
+        width: 200px;
+    }
+
+#button{
+	clear:both;
+	margin:auto;
+	width:5%;
+}
+
+.button{
+	font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+	font-weight: "bold";
+	background-color: green;
+	border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
 }
