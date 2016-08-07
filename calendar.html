@@ -13,9 +13,11 @@
 <script type="text/javascript">
  <!--
     function ReadCookie()
-    {
+    {	
+       console.log(document.cookie);	
        var allcookies = document.cookie;
-       document.write ("All Cookies : " + allcookies );
+
+      
        
        // Get all the cookies pairs in an array
        cookiearray = allcookies.split(';');
@@ -29,16 +31,21 @@
 					start: name
 				})
        }
+
+       return eventsArray;
     }
- //--> '🍅' temp.push({
-//				title: '🍅',
- //               start: '2016-06-01'
-//			})
+    window.onload = function(){
+    	
+    }
+
 </script>
 <script>
 	$(document).ready(function() {
 		temp = []
-        
+        temp.push({
+				title: '🍅',
+                start: '2016-06-01'
+			});
 		$('#calendar').fullCalendar({
 			header: {
 				left: 'prev,next today',
@@ -48,8 +55,12 @@
 			//defaultDate: '2016-06-12',
 			editable: true,
 			eventLimit: true, // allow "more" link when too many events
-			events: temp
+			events: ReadCookie(),
+
+			
 		});
+
+		ReadCookie();
 		
 	});
 </script>

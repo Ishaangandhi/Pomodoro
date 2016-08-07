@@ -128,3 +128,32 @@ div{font-family: "Helvetica Neue", "Helvetica"; color:black;  border-color: blac
 		text-decoration: none;
 		
 	}
+
+	/*.container-popup{
+		z-index: -1;
+		position: fixed;
+		top: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		background-color:rgba(0,0,0,1.0);
+	}
+
+	.inputBox{
+		position: absolute;
+		width: 50%;
+		height: 30%;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		margin: auto;
+		background-color: #5C755E;
+		}*/
+		#everything{
+			margin:auto;
+			position: relative;
+			top: 40%;
+			transform: translateY(-50%);
+		}

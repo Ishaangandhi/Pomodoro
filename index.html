@@ -1,6 +1,7 @@
 <html>
+<meta charset='utf-8' />
 <head>
-	<title>Pomodoro Scheduler</title>
+	<title>Tomato Tracker</title>
 	<link rel="apple-touch-icon" sizes="57x57" href="favicon/apple-icon-57x57.png">
 	<link rel="apple-touch-icon" sizes="60x60" href="favicon/apple-icon-60x60.png">
 	<link rel="apple-touch-icon" sizes="72x72" href="favicon/apple-icon-72x72.png">
@@ -20,7 +21,9 @@
 	<meta name="theme-color" content="#ffffff">
 
 	<link rel="stylesheet" type="text/css" href="pomodoro.css">
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.21/themes/base/jquery-ui.css" type="text/css" media="all" />
 
+	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 	<script type="text/javascript">
 		
 		var cycles = 3;
@@ -35,6 +38,11 @@
 		var buttonPressed = false;
 		var masterInterval;
 		var timer, minutes, secs;
+		var d = new Date();
+
+		function dummyData(date){
+			setCookie(date, getCookie(date) + "🍅", 365);
+		}
 		function startTimer(time, display) {
 			console.log("Stared Timer" + " " + time + ", " + display);
 			timer = time;
@@ -55,21 +63,32 @@
 					clearInterval(intervalID);
 					working = !working;
 					document.getElementById("timerStatus").textContent = (working) ? "Work":"Break";
-					console.log(working);
+					
 					if(working == true){
 						console.log("WORK" + working)
 						if(cycles > 0){
 
 							clearInterval(intervalID);
-						document.getElementById("pauseButton").textContent = "Continue Working"
-						paused = true;
-						buttonState = true;
+							document.getElementById("pauseButton").textContent = "Continue Working"
+							paused = true;
+							buttonState = true;
 							
 						}
 						endBreak.play();
 					}
 					else{
-						console.log("BREAK" + working)
+						console.log("BREAK" + working);
+						var month = d.getMonth() + 1;
+						if(getCookie(d.getFullYear() + "-" + month + "-" + d.getDate()) == "" ){
+							setCookie(d.getFullYear() + "-" +month + "-" + d.getDate(), "🍅", 365);
+						}
+						else{
+							setCookie(d.getFullYear() + "-" + month+ "-" + d.getDate(), getCookie(d.getFullYear() + "-" + month + "-" + d.getDate()) + "🍅", 365);
+						}
+
+						
+						console.log(document.cookie);
+						console.log(getCookie("title"));
 						breakTimer();
 						cycles--;
 						document.getElementById("tomatoTracker").textContent = cycles + " tomatoes remaining";
@@ -80,6 +99,30 @@
 			}, 1);
 		}
 
+		function getCookie(cname) { //from W3Schools
+			var name = cname + "=";
+			var ca = document.cookie.split(';');
+			for(var i = 0; i <ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0)==' ') {
+					c = c.substring(1);
+				}
+				if (c.indexOf(name) == 0) {
+					return c.substring(name.length,c.length);
+				}
+			}
+			return "";
+		}
+
+		function setCookie(cname, cvalue, exdays) { //from W3Schools
+			var d = new Date();
+			d.setTime(d.getTime() + (exdays*24*60*60*1000));
+			var expires = "expires="+d.toUTCString();
+			document.cookie = cname + "=" + cvalue + "; " + expires + ";" + "path=/;"; 
+		}
+
+
+
 		function breakTimer() {
 			console.log("break time")
 			var timerAmount = 60 * 5; 
@@ -88,77 +131,90 @@
 			timerText = document.querySelector('#timer');
 			startTimer(timerAmount, timerText)
 		}
-		window.onload = workTimer;
+		window.onload = function () { cycles = prompt("For how many tomatoes do you want to work? One tomato is a half-hour work session with a five minute break.");
+		workTimer();
+	}
 
-		function workTimer() {
-			document.getElementById("tomatoTracker").textContent = cycles + " tomatoes remaining";
-			var timerAmount = 60 * 25;
-			masterInterval = timerAmount;
-			bar.style.backgroundColor = "rgb(139,0,0)";
 
-			timerText = document.querySelector('#timer');
-			startTimer(timerAmount, timerText);
-		};
+	
 
-		function pauseTimer(){
-			if(!buttonState){
-				if(cycles > 0){
-					if(!paused){
-						clearInterval(intervalID);
-						document.getElementById("pauseButton").textContent = "Continue"
-						paused = true;
+	function workTimer() {
+		document.getElementById("tomatoTracker").textContent = cycles + " tomatoes remaining";
+		var timerAmount = 60 * 25;
+		masterInterval = timerAmount;
+		bar.style.backgroundColor = "rgb(139,0,0)";
 
-					}
-					else{
-						paused = false;
-						document.getElementById("pauseButton").textContent = "Pause"
-						startTimer(timer,document.querySelector('#timer'))
-					}
+		timerText = document.querySelector('#timer');
+		startTimer(timerAmount, timerText);
+	};
+
+	function pauseTimer(){
+		if(!buttonState){
+			if(cycles > 0){
+				if(!paused){
+					clearInterval(intervalID);
+					document.getElementById("pauseButton").textContent = "Continue"
+					paused = true;
+
+				}
+				else{
+					paused = false;
+					document.getElementById("pauseButton").textContent = "Pause"
+					startTimer(timer,document.querySelector('#timer'))
 				}
 			}
-
-			else{
-
-				buttonState = false;
-				document.getElementById("pauseButton").textContent = "Pause"
-				workTimer();
-				paused = false;
-				
-				
-			}
 		}
 
-		function updateBar(part, whole){
-			var bar = document.getElementById("bar");
-			var width = (part/whole)*100;
+		else{
 
-			bar.style.width= width + '%';
+			buttonState = false;
+			document.getElementById("pauseButton").textContent = "Pause"
+			workTimer();
+			paused = false;
+
 
 		}
-
-		function metricsLink(){
-
-			window.location.href = "calendar.html";
-		}
+	}
 
 
-	</script>
+	function updateBar(part, whole){
+		var bar = document.getElementById("bar");
+		var width = (part/whole)*100;
+
+		bar.style.width= width + '%';
+
+	}
+
+	function metricsLink(){
+
+		window.location.href = "calendar.html";
+	}
+
+
+</script>
 </head>
 
 <body>
-	<div class = "toolbar"><div class = "header"><button id = "headerElementLeft" onclick = "timerLink()">Timer</button><button id = "headerElementRight" onclick = "metricsLink()">Metrics</button></div></div>
-	<div class = "wrapper">
-		<div id = "progress">
-			<div id = "bar">
+	<div id = "everything">
+		<div id = "dialog" title = "Welcome" style = "display:none">
+			How many tomatoes would you like to work for?
+		</div>
+		<div class = "toolbar"><div class = "header"><button id = "headerElementLeft" onclick = "timerLink()">Timer</button><button id = "headerElementRight" onclick = "metricsLink()">Metrics</button></div></div>
+		<div class = "wrapper">
+			<div id = "progress">
+				<div id = "bar">
+				</div>
+			</div>
+			<div id = "timerWindow"><div class = "timer" id = "timer"></div><div id = "timerStatus">Work</div></div>
+
+			<div id = "tomatoTracker">X Toaoes Remaining</div>
+			<div id = "button">
+				<button onclick = "pauseTimer()" class = "button" id = "pauseButton">Pause</button>
 			</div>
 		</div>
-		<div id = "timerWindow"><div class = "timer" id = "timer"></div><div id = "timerStatus">Work</div></div>
-
-		<div id = "tomatoTracker">X Toatoes Remaining</div>
-		<div id = "button">
-			<button onclick = "pauseTimer()" class = "button" id = "pauseButton">Pause</button>
-		</div>
 	</div>
+	
+	
 </body>
 
 
