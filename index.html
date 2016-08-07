@@ -23,13 +23,16 @@
 
 	<script type="text/javascript">
 		
-		var cycles = 2;
+		var cycles = 3;
 		console.log(cycles);
-		
+		var endBreak = new Audio("returnToWorkSingle.mp3");
+		var endWork = new Audio("breakTimeSingle.mp3");
 
 		var working = true;
 		var paused = false;
 		var intervalID;
+		var buttonState = false;
+		var buttonPressed = false;
 		var masterInterval;
 		var timer, minutes, secs;
 		function startTimer(time, display) {
@@ -56,23 +59,30 @@
 					if(working == true){
 						console.log("WORK" + working)
 						if(cycles > 0){
-							workTimer();
+
+							clearInterval(intervalID);
+						document.getElementById("pauseButton").textContent = "Continue Working"
+						paused = true;
+						buttonState = true;
+							
 						}
+						endBreak.play();
 					}
 					else{
 						console.log("BREAK" + working)
 						breakTimer();
 						cycles--;
 						document.getElementById("tomatoTracker").textContent = cycles + " tomatoes remaining";
+						endWork.play();
 
 					}
 				}
-			}, 1000);
+			}, 1);
 		}
 
 		function breakTimer() {
 			console.log("break time")
-			var timerAmount = 60 * .05; 
+			var timerAmount = 60 * 5; 
 			masterInterval = timerAmount;
 			bar.style.backgroundColor = "green";
 			timerText = document.querySelector('#timer');
@@ -82,26 +92,39 @@
 
 		function workTimer() {
 			document.getElementById("tomatoTracker").textContent = cycles + " tomatoes remaining";
-			var timerAmount = 60 * .1;
+			var timerAmount = 60 * 25;
 			masterInterval = timerAmount;
-			bar.style.backgroundColor = "red";
+			bar.style.backgroundColor = "rgb(139,0,0)";
+
 			timerText = document.querySelector('#timer');
 			startTimer(timerAmount, timerText);
 		};
 
 		function pauseTimer(){
-			if(cycles > 0){
-				if(!paused){
-					clearInterval(intervalID);
-					document.getElementById("pauseButton").textContent = "Continue"
-					paused = true;
+			if(!buttonState){
+				if(cycles > 0){
+					if(!paused){
+						clearInterval(intervalID);
+						document.getElementById("pauseButton").textContent = "Continue"
+						paused = true;
 
+					}
+					else{
+						paused = false;
+						document.getElementById("pauseButton").textContent = "Pause"
+						startTimer(timer,document.querySelector('#timer'))
+					}
 				}
-				else{
-					paused = false;
-					document.getElementById("pauseButton").textContent = "Pause"
-					startTimer(timer,document.querySelector('#timer'))
-				}
+			}
+
+			else{
+
+				buttonState = false;
+				document.getElementById("pauseButton").textContent = "Pause"
+				workTimer();
+				paused = false;
+				
+				
 			}
 		}
 
@@ -113,12 +136,17 @@
 
 		}
 
+		function metricsLink(){
+
+			window.location.href = "calendar.html";
+		}
+
 
 	</script>
 </head>
 
 <body>
-	<div class = "header"><button id = "headerElementLeft" onclick = "timerLink()">Timer</button><button id = "headerElementRight" onclick = "metricsLink">Metrics</button></div>
+	<div class = "toolbar"><div class = "header"><button id = "headerElementLeft" onclick = "timerLink()">Timer</button><button id = "headerElementRight" onclick = "metricsLink()">Metrics</button></div></div>
 	<div class = "wrapper">
 		<div id = "progress">
 			<div id = "bar">
