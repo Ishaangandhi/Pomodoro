@@ -16,7 +16,7 @@ div{font-family: "Helvetica Neue", "Helvetica"; color:black;  border-color: blac
 		position: relative;
 		width: 100%;
 		height: 100%;
-		background-color: red;
+		background-color: rgb(139,0,0);
 		border-radius: 10px;
 	}
 	#pause{
@@ -39,15 +39,15 @@ div{font-family: "Helvetica Neue", "Helvetica"; color:black;  border-color: blac
 	}
 
 	#source {
-    
-    width:100%;
-    clear:both;
-    margin:auto;
-    display:block;
-    position:absolute;
-    align-content: center;
-    bottom:0;
-    height: 30%;
+
+		width:100%;
+		clear:both;
+		margin:auto;
+		display:block;
+		position:absolute;
+		align-content: center;
+		bottom:0;
+		height: 30%;
 	}
 	#tomatoTracker{
 		margin: auto;
@@ -69,6 +69,24 @@ div{font-family: "Helvetica Neue", "Helvetica"; color:black;  border-color: blac
 
 	}
 
+	.hgInner {
+    position: relative;
+    float: left;
+    height: 100%;
+    width: 955px;
+    overflow: hidden;
+    -webkit-animation: reveal 4s ease;
+    -webkit-animation-fill-mode: backwards;
+}
+
+@-webkit-keyframes reveal {
+    0%   {width: 0px;}
+    100% { width: 100%;}
+}
+@keyframes reveal {
+    0%   {width: 0px;}
+    100% { width: 100%;}
+}
 	.toolbar{
 		position: : relative;
 		margin:auto;
